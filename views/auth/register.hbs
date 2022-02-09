@@ -3,8 +3,9 @@
     <h1>Register</h1>
     <form method="POST" action="/register">
       <div class="form-group mb-3">
-        <label for="formGroupExampleInput">Name</label>
+        <label for="name">Name</label>
         <input
+          id="name"
           value="{{user.name}}"
           name="name"
           type="text"
@@ -16,8 +17,9 @@
         {{/if}}
       </div>
       <div class="form-group mb-3">
-        <label for="formGroupExampleInput2">Email</label>
+        <label for="email">Email</label>
         <input
+          id="email"
           value="{{user.email}}"
           name="email"
           type="email"
@@ -30,8 +32,9 @@
       </div>
 
       <div class="form-group mb-3">
-        <label for="formGroupExampleInput2">Password</label>
+        <label for="password">Password</label>
         <input
+          id="password"
           name="password"
           type="password"
           class="form-control {{#if errors.password}}is-invalid{{/if}}"
