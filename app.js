@@ -4,9 +4,13 @@ const createError = require('http-errors');
 const express = require('express');
 const logger = require('morgan');
 const path = require('path')
+const passport = require('passport')
+
+const sessionConfig = require('./config/session.config');
 
 require('./config/db.config');
 require('./config/hbs.config');
+require('./config/passport.config');
 
 const app = express();
 
@@ -16,6 +20,10 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
+app.use(sessionConfig);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 /**
  * View setup
@@ -26,6 +34,11 @@ app.set('view engine', 'hbs');
 /**
  * Configure routes
  */
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user
+  next()
+})
+
 const router = require('./config/routes.config');
 app.use('/', router);
 
