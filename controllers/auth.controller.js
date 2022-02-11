@@ -42,7 +42,7 @@ module.exports.doLogin = (req, res, next) => {
     if(err) {
       next(err);
     } else if(!user){
-      res.status(404).render('auth/login', { errorMessage: validations.error })
+      res.status(404).render('auth/login', { errors: { email: validations.error } })
     } else {
       req.login(user, (loginError) => {
         if(loginError) {
