@@ -3,7 +3,7 @@ require('dotenv/config');
 const createError = require('http-errors');
 const express = require('express');
 const logger = require('morgan');
-const path = require('path')
+const path = require('path');
 
 require('./config/db.config');
 require('./config/hbs.config');
@@ -16,6 +16,22 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
+
+
+/**
+ * Configure Session
+ */
+const sessionConfig = require('./config/session.config');
+app.use(sessionConfig);
+
+
+/**
+ * Passport
+ */
+const passport = require('passport');
+require('./config/passport.config')
+app.use(passport.initialize());
+app.use(passport.session());
 
 /**
  * View setup

@@ -8,19 +8,19 @@ const SALT_ROUNDS = 10;
 const userSchema = new Schema({
   name: {
     type: String,
-    required: 'name is required',
-    minLength: [3, 'name needs at least 3 chars']
+    required: 'Name is required',
+    minLength: [3, 'Name needs at least 3 chars']
   },
   email: {
     type: String,
-    required: 'email is required',
-    match: [EMAIL_PATTERN, 'email is not valid'],
+    required: 'Email is required',
+    match: [EMAIL_PATTERN, 'Email is not valid'],
     unique: true
   },
   password: {
     type: String,
-    required: 'password is required',
-    match: [PASSWORD_PATTERN, 'password needs at least 8 chars'],
+    required: 'Password is required',
+    match: [PASSWORD_PATTERN, 'Password needs at least 8 chars'],
   },
 });
 
@@ -39,8 +39,8 @@ userSchema.pre('save', function(next) {
   }
 })
 
-userSchema.methods.checkPassword = function() {
-  //...
+userSchema.methods.checkPassword = function(password) {
+  return bcrypt.compare(password, this.password);
 }
 
 const User = model('User', userSchema);

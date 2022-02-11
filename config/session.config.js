@@ -1,6 +1,6 @@
 const expressSession = require('express-session');
-const MongoStore = require('coneect-mongo');
-const {DB} = require('../config/db.config');
+const MongoStore = require('connect-mongo');
+const { DB } = require('../config/db.config');
 
 const sessionMaxAge = process.env.SESSION_MAXAGE || 7;
 
@@ -14,7 +14,7 @@ const sessionConfig = expressSession({
         httpOnly: true
     },
     store: new MongoStore({
-        mongoURL: DB,
+        mongoUrl: DB,
         ttl: 24 * 3600 * sessionMaxAge
     })
 })
