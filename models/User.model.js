@@ -22,6 +22,9 @@ const userSchema = new Schema({
     required: 'Password is required',
     match: [PASSWORD_PATTERN, 'Password needs at least 8 chars'],
   },
+  googleID: {
+    type: String
+  }
 });
 
 userSchema.pre('save', function(next) {

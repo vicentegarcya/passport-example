@@ -37,8 +37,8 @@ module.exports.login = (req, res, next) => {
   res.render('auth/login', )
 }
 
-module.exports.doLogin = (req, res, next) => {
-  passport.authenticate('local-auth', (err, user, validations) => {
+const login = (req, res, next, provider) => {
+  passport.authenticate(provider || 'local-auth', (err, user, validations) => {
     if(err) {
       next(err);
     } else if(!user){
@@ -53,6 +53,14 @@ module.exports.doLogin = (req, res, next) => {
       })
     }
   })(req, res, next)
+}
+
+module.exports.doLogin = (req, res, next) => {
+  login(req, res, next);
+}
+
+module.exports.doLoginGoogle = (req, res, next) => {
+  login(req, res, next, 'google-auth');
 }
 
 module.exports.logout = (req, res, next) => {
