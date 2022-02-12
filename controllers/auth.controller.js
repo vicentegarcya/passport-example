@@ -7,7 +7,7 @@ module.exports.register = (req, res, next) => {
 };
 
 module.exports.doRegister = (req, res, next) => {
-  const { name, email, password } = req.body;
+  const user = { name, email, password } = req.body;
 
   const renderWithErrors = (errors) => {
     res.render('auth/register', { errors, user: req.body })
@@ -18,7 +18,10 @@ module.exports.doRegister = (req, res, next) => {
       if(userFound) {
         renderWithErrors( { email: 'Email already in use' } );
       } else {
-        return User.create(req.body)
+        if(req.file) {
+          user.image = req.file.path;
+        }
+        return User.create(user)
           .then(() => {
             res.redirect('/login');
           })

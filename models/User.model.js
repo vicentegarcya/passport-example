@@ -24,6 +24,9 @@ const userSchema = new Schema({
   },
   googleID: {
     type: String
+  },
+  image: {
+    type: String
   }
 });
 
