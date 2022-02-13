@@ -1,6 +1,7 @@
 const User = require('../models/User.model.js');
 const mongoose = require('mongoose');
 const passport = require('passport');
+const mailer = require('../config/mailer.config')
 
 module.exports.register = (req, res, next) => {
   res.render('auth/register');
@@ -22,7 +23,9 @@ module.exports.doRegister = (req, res, next) => {
           user.image = req.file.path;
         }
         return User.create(user)
-          .then(() => {
+          .then((createdUser) => {
+            mailer.sendActivationEmail(createdUser.email, createdUser.activationToken);
+            req.flash('flashMessage', 'We have send you an email to complete your registration');
             res.redirect('/login');
           })
       }
@@ -51,6 +54,7 @@ const login = (req, res, next, provider) => {
         if(loginError) {
           next(loginError);
         } else {
+          req.flash('flashMessage', 'You have succesfully signed in');
           res.redirect('/profile');
         }
       })
@@ -64,6 +68,20 @@ module.exports.doLogin = (req, res, next) => {
 
 module.exports.doLoginGoogle = (req, res, next) => {
   login(req, res, next, 'google-auth');
+}
+
+module.exports.activate = (req, res, next) => {
+  const activationToken = req.params.token;
+
+  User.findOneAndUpdate({
+    activationToken,
+    active: false
+  },
+  { active: true })
+    .then(() => {
+      req.flash('flashMessage', 'You have activated your account. Welcome!')
+      res.redirect('/login');
+    })
 }
 
 module.exports.logout = (req, res, next) => {

@@ -4,6 +4,7 @@ const createError = require('http-errors');
 const express = require('express');
 const logger = require('morgan');
 const path = require('path');
+const flash = require('connect-flash')
 
 require('./config/db.config');
 require('./config/hbs.config');
@@ -16,6 +17,7 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
+app.use(flash());
 
 
 /**
@@ -38,6 +40,14 @@ app.use(passport.session());
  */
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+
+/**
+ * Flash Middleware
+*/
+app.use((req, res, next) => {
+  res.locals.flashMessage = req.flash('flashMessage');
+  next();
+})
 
 /**
  * Configure routes

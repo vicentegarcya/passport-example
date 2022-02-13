@@ -24,6 +24,8 @@ router.get('/logout', isAuthenticated, authController.logout);
 router.get('/login/google', passport.authenticate('google-auth', { scope: SCOPE }));
 router.get('/auth/google/callback', authController.doLoginGoogle);
 
+router.get('/activate/:token', isNotAuthenticated, authController.activate);
+
 // User routes
 router.get('/profile', isAuthenticated, userController.profile);
 
