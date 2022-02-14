@@ -10,7 +10,6 @@ const transporter = nodemailer.createTransport({
 })
 
 module.exports.sendActivationEmail = (email, token) => {
-    console.log('entro');
     transporter.sendMail({
         from: `John Doe ${process.env.NM_USER}`,
         to: email,

@@ -5,12 +5,12 @@ const upload = require('../config/storage.config');
 
 const authController = require('../controllers/auth.controller');
 const userController = require('../controllers/users.controller');
-const { isAuthenticated, isNotAuthenticated } = require('../middlewares/auth.middleware');
+const { isAuthenticated, isNotAuthenticated, isActivated } = require('../middlewares/auth.middleware');
 
 const passport = require('passport');
 const SCOPE = [ "https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email" ]
 
-router.get('/', (req, res, next) => {
+router.get('/', isNotAuthenticated, (req, res, next) => {
   res.render('index')
 })
 
@@ -27,6 +27,6 @@ router.get('/auth/google/callback', authController.doLoginGoogle);
 router.get('/activate/:token', isNotAuthenticated, authController.activate);
 
 // User routes
-router.get('/profile', isAuthenticated, userController.profile);
+router.get('/profile', isAuthenticated, isActivated, userController.profile);
 
 module.exports = router;
